@@ -28,8 +28,9 @@ app.use('/audit', auditRoutes);
 
 app.get('/dashboard', (req, res) => {
   if (!req.session.user) return res.redirect('/login');
-  res.render('dashboard', { user: req.session.user });
+  res.render('dashboard', {title: 'Dashboard', user: req.session.user });
 });
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

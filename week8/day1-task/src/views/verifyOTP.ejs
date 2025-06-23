@@ -1,4 +1,4 @@
-<% include ./partials/header.ejs %>
+<%- include('partials/header.ejs') %>
 
 <h2>OTP Verification</h2>
 <p class="text-success"><%= message %></p>
@@ -37,4 +37,4 @@
   const countdown = setInterval(updateTimer, 1000);
 </script>
 
-<% include ./partials/footer.ejs %>
+<%- include('partials/footer.ejs') %>

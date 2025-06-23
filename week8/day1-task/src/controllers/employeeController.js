@@ -3,7 +3,7 @@ import AuditLog from '../models/AuditLog.js';
 
 export const getEmployees = async (req, res) => {
   const employees = await Employee.find();
-  res.render('employees', { employees, user: req.user });
+  res.render('employees', { employees, user: req.user, title: 'Employee' });
 };
 
 export const terminateEmployee = async (req, res) => {
