@@ -1,0 +1,43 @@
+<% include ./partials/header.ejs %>
+
+<h2>Employee Directory</h2>
+
+<table class="table table-bordered table-hover mt-4">
+  <thead class="table-dark">
+    <tr>
+      <th>Name</th>
+      <th>Department</th>
+      <th>Position</th>
+      <th>Salary</th>
+      <% if (user.role === 'admin' || user.role === 'HR') { %>
+        <th>Action</th>
+      <% } %>
+    </tr>
+  </thead>
+  <tbody>
+    <% employees.forEach(emp => { %>
+      <tr>
+        <td><%= emp.name %></td>
+        <td><%= emp.department %></td>
+        <td><%= emp.position %></td>
+        <td>$<%= emp.salary %></td>
+        <% if (user.role === 'admin') { %>
+          <td>
+            <form action="/employees/update/<%= emp._id %>" method="POST" class="d-flex">
+              <input name="salary" type="number" min="0" class="form-control form-control-sm me-2" value="<%= emp.salary %>">
+              <button type="submit" class="btn btn-sm btn-success">Update</button>
+            </form>
+          </td>
+        <% } else if (user.role === 'HR') { %>
+          <td>
+            <a href="/employees/terminate/<%= emp._id %>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Terminate</a>
+          </td>
+        <% } else { %>
+          <td>–</td>
+        <% } %>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<% include ./partials/footer.ejs %>

@@ -1,0 +1,18 @@
+<!-- <% include ./partials/header.ejs %> -->
+ <%- include('partials/header.ejs') %>
+
+ <% include %>
+
+<h2>Welcome, <%= user.name %> 👋</h2>
+<p>Your role: <strong><%= user.role %></strong> | Department: <strong><%= user.department %></strong></p>
+
+<div class="mt-4">
+  <a href="/employees" class="btn btn-outline-primary me-2">View Employees</a>
+  <% if (user.role === 'admin') { %>
+    <a href="/audit" class="btn btn-outline-secondary">View Audit Logs</a>
+  <% } %>
+</div>
+
+<!-- <% include ./partials/footer.ejs %> -->
+ <%- include('partials/footer.ejs') %>
+
