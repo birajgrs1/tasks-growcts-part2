@@ -1,0 +1,59 @@
+<style>
+  body{
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  .top-learners, .distribute-by-roles, .last-login-info{
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  h2{
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  li{
+    margin-bottom: 10px;
+    color: #555;
+  }
+</style>
+
+<div class="top-learners">
+<h2>High Earners</h2>
+<ul>
+  <% highEarners.forEach(emp => { %>
+    <li><%= emp.name %> - $<%= emp.salary %></li>
+  <% }) %>
+</ul>
+</div>
+
+
+<div class="distribute-by-roles">
+<h2>Role Distribution</h2>
+<ul>
+  <% roleCount.forEach(role => { %>
+    <li><%= role._id %>: <%= role.count %></li>
+  <% }) %>
+</ul>
+</div>
+
+<div class="last-login-info">
+<h2>Last Login Info</h2>
+<ul>
+  <% lastLogins.forEach(user => { %>
+    <li><%= user.name %> - <%= user.lastLogin?.toLocaleString() || "Never" %></li>
+  <% }) %>
+</ul>
+
+</div>
