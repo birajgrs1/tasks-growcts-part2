@@ -26,6 +26,8 @@ app.use('/', authRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/audit', auditRoutes);
 
+app.get('/', (req, res) => res.redirect('/login'));
+
 app.get('/dashboard', (req, res) => {
   if (!req.session.user) return res.redirect('/login');
   res.render('dashboard', {title: 'Dashboard', user: req.session.user });
