@@ -1,6 +1,5 @@
 import express from 'express';
-import { register, login, logout } from '../controllers/authController.js';
-
+import { register, login, logout, verifyOtp } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -16,5 +15,12 @@ router.get('/register', (req, res) => {
 
 router.post('/login', login);
 router.get('/logout', logout);
+
+router.get('/verify-otp', (req, res) => {
+  res.render('verify-otp', { title: 'Verify OTP' });
+});
+
+router.post('/verify-otp', verifyOtp);
+
 
 export default router;

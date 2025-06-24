@@ -1,40 +1,12 @@
 <%- include('partials/header.ejs') %>
 
-<h2>OTP Verification</h2>
-<p class="text-success"><%= message %></p>
-
-<div class="text-danger mb-3">
-  OTP will expire in <span id="timer">05:00</span>
-</div>
-
-<form method="POST" action="/verify-otp-phone" class="w-50 mx-auto">
+<h2>Enter OTP</h2>
+<form action="/verify-otp" method="POST" class="w-50 mx-auto">
   <div class="mb-3">
-    <label for="code">Enter OTP Code:</label>
-    <input name="code" class="form-control" required />
+    <label>Enter the 6-digit code sent to your phone:</label>
+    <input name="code" type="text" class="form-control" required maxlength="6">
   </div>
-  <button type="submit" class="btn btn-primary w-100">Verify</button>
+  <button type="submit" class="btn btn-success w-100">Verify</button>
 </form>
-
-<script>
-  // Set timer for 5 minutes
-  let seconds = 300;
-
-  function updateTimer() {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    document.getElementById('timer').textContent = 
-      `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-
-    if (seconds > 0) {
-      seconds--;
-    } else {
-      clearInterval(countdown);
-      alert('OTP expired. Please request a new one.');
-      window.location.href = '/otp/expired';
-    }
-  }
-
-  const countdown = setInterval(updateTimer, 1000);
-</script>
 
 <%- include('partials/footer.ejs') %>

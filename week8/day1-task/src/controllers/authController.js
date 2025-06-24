@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import LoginLog from "../models/LoginLog.js";
-// import { sendPhoneOTP, verifyPhoneOTP } from "./otpController.js";
+import { sendPhoneOTP, verifyPhoneOTP } from "../services/otpService.js";
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password, role, department } = req.body;
+    const { name, email, password, role, department, phone } = req.body;
 
     const existing = await User.findOne({ email });
     if (existing) return res.send("Email already registered");
@@ -18,6 +18,7 @@ export const register = async (req, res) => {
       password: hashed,
       role,
       department,
+      phone,
     });
 
     res.redirect("/login");
@@ -25,6 +26,7 @@ export const register = async (req, res) => {
     res.status(500).send("Registration failed");
   }
 };
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -34,21 +36,50 @@ export const login = async (req, res) => {
     return res.send("Invalid credentials");
   }
 
-  req.session.user = {
+  await sendPhoneOTP(user.phone);
+
+  req.session.tempUser = {
     _id: user._id,
     name: user.name,
     role: user.role,
     department: user.department,
+    phone: user.phone
   };
 
+  res.redirect('/verify-otp');
+};
+
+export const verifyOtp = async (req, res) => {
+  const { code } = req.body;
+  const tempUser = req.session.tempUser;
+
+  if (!tempUser) return res.redirect('/login');
+
+  const valid = await verifyPhoneOTP(tempUser.phone, code);
+  if (!valid) return res.send("Invalid or expired OTP");
+
+  req.session.user = tempUser;
+  delete req.session.tempUser;
+
   await LoginLog.create({
-    userId: user._id,
+    userId: tempUser._id,
     ip: req.ip,
     userAgent: req.headers["user-agent"],
   });
 
-  res.redirect("/dashboard");
+  await AuditLog.create({
+    actor: tempUser._id,
+    action: '2fa_login',
+    target: tempUser._id,
+    ip: req.ip,
+    endpoint: req.originalUrl,
+    dataBefore: null,
+    dataAfter: null
+  });
+
+  res.redirect('/dashboard');
 };
+
 
 export const logout = (req, res) => {
   req.session.destroy();

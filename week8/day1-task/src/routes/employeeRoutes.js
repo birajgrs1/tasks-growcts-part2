@@ -7,10 +7,6 @@ const router = express.Router();
 
 
 router.get('/', isAuthenticated, getEmployees);
-  
-
-
-
 router.get('/terminate/:id', isAuthenticated, requireRole('HR'), terminateEmployee);
 
 export default router;
